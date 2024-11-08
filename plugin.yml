@@ -1,0 +1,13 @@
+name: SimpleCrates
+version: 1.0.0
+author: WavyCraft
+api: 5.0.0
+main: wavycraft\simplecrates\Loader
+
+permissions:
+  simplecrates.key:
+    default: op
+  simplecrates.keyall:
+    default: op
+  simplecrates.createcrate:
+    default: op

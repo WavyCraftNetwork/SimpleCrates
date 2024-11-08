@@ -1,0 +1,77 @@
+crates:
+  common:
+    key: "tripwire_hook"
+    key_name: "§r§l§f-§e Common Crate Key§f -"
+    key_lore:
+      - ""
+      - "§r§l§f(§e!§f)§r§f Use this key at §e/warp crates§f to claim your prize!"
+    crate_floating_text: "§l§eCommon Crate\nYou need a key to open!"
+
+  rare:
+    key: "tripwire_hook"
+    key_name: "§r§l§f-§a Rare Crate Key§f -"
+    key_lore:
+      - ""
+      - "§r§l§f(§e!§f)§r§f Use this key at §e/warp crates§f to claim your prize!"
+    crate_floating_text: "§l§aRare Crate\nYou need a key to open!"
+  
+  epic:
+    key: "tripwire_hook"
+    key_name: "§r§l§f-§b Epic Crate Key§f -"
+    key_lore:
+      - ""
+      - "§r§l§f(§e!§f)§r§f Use this key at §e/warp crates§f to claim your prize!"
+    crate_floating_text: "§l§bEpic Crate\nYou need a key to open!"
+
+  legendary:
+    key: "tripwire_hook"
+    key_name: "§r§l§f-§5 Legendary Crate Key§f -"
+    key_lore:
+      - ""
+      - "§r§l§f(§e!§f)§r§f Use this key at §e/warp crates§f to claim your prize!"
+    crate_floating_text: "§l§5Legendary Crate\nYou need a key to open!"
+
+prizes:
+  common:
+    - item: "diamond"
+      count: 1
+      custom_name: "§bCommon Diamond"
+      lore:
+        - "A rare prize from a common crate."
+      enchantments:
+        - type: "sharpness"
+          level: 1
+      chance: 70
+
+  rare:
+    - item: "emerald"
+      count: 2
+      custom_name: "§eRare Emerald"
+      lore:
+        - "A precious gem from a rare crate."
+      enchantments:
+        - type: "fortune"
+          level: 2
+      chance: 50
+
+  epic:
+    - item: "netherite_ingot"
+      count: 1
+      custom_name: "§dEpic Netherite Ingot"
+      lore:
+        - "A legendary prize from an epic crate."
+      enchantments:
+        - type: "unbreaking"
+          level: 3
+      chance: 30
+
+  legendary:
+    - item: "netherite_ingot"
+      count: 1
+      custom_name: "§dLegendary Netherite Ingot"
+      lore:
+        - "A legendary prize from an epic crate."
+      enchantments:
+        - type: "unbreaking"
+          level: 3
+      chance: 10
