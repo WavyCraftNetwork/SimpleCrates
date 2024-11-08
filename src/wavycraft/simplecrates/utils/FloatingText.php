@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace wavycraft\simplecrates\utils;
 
 use pocketmine\Server;
+
 use pocketmine\world\particle\FloatingTextParticle;
 use pocketmine\world\Position;
+
 use pocketmine\utils\Config;
 
 use wavycraft\simplecrates\Loader;
