@@ -6,7 +6,9 @@ namespace wavycraft\simplecrates\commands;
 
 use pocketmine\command\CommandSender;
 use pocketmine\command\Command;
+
 use pocketmine\Server;
+
 use wavycraft\simplecrates\utils\KeyManager;
 
 class KeyAllCommand extends Command {
