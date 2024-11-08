@@ -6,20 +6,26 @@ namespace wavycraft\simplecrates;
 
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerInteractEvent;
+use pocketmine\event\entity\EntityTeleportEvent;
 use pocketmine\event\world\ChunkLoadEvent;
 use pocketmine\event\world\ChunkUnloadEvent;
 use pocketmine\event\world\WorldUnloadEvent;
 use pocketmine\event\block\BlockPlaceEvent;
 use pocketmine\event\block\BlockBreakEvent;
-use pocketmine\event\entity\EntityTeleportEvent;
+
 use pocketmine\block\BlockTypeIds;
+
 use pocketmine\player\Player;
+
 use pocketmine\world\Position;
+
 use pocketmine\utils\Config;
 use pocketmine\utils\TextFormat as TextColor;
 use pocketmine\utils\SingletonTrait;
+
 use wavycraft\simplecrates\utils\FloatingText;
 use wavycraft\simplecrates\utils\CrateManager;
+
 use wavycraft\core\utils\SoundUtils;
 
 class EventListener implements Listener {
