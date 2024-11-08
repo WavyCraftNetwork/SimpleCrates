@@ -10,6 +10,8 @@ use wavycraft\simplecrates\commands\KeyCommand;
 use wavycraft\simplecrates\commands\KeyAllCommand;
 use wavycraft\simplecrates\commands\CreateCrateCommand;
 
+use wavycraft\simplecrates\utils\FloatingText;
+
 final class Loader extends PluginBase {
 
     protected static $instance;
@@ -28,6 +30,10 @@ final class Loader extends PluginBase {
             new KeyAllCommand(),
             new CreateCrateCommand()
         ]);
+    }
+
+    protected function onDisable() : void{
+        FloatingText::saveFile();
     }
 
     public static function getInstance() : self{
