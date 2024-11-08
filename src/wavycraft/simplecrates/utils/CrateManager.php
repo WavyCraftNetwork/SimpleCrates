@@ -5,12 +5,17 @@ declare(strict_types=1);
 namespace wavycraft\simplecrates\utils;
 
 use pocketmine\player\Player;
+
 use pocketmine\block\Block;
+
 use pocketmine\utils\Config;
 use pocketmine\utils\SingletonTrait;
 use pocketmine\utils\TextFormat as TextColor;
+
 use pocketmine\world\Position;
+
 use wavycraft\simplecrates\Loader;
+
 use wavycraft\core\utils\SoundUtils;
 
 final class CrateManager {
