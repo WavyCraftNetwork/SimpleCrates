@@ -6,9 +6,13 @@ namespace wavycraft\simplecrates\commands;
 
 use pocketmine\command\CommandSender;
 use pocketmine\command\Command;
+
 use pocketmine\player\Player;
+
 use pocketmine\Server;
+
 use pocketmine\utils\TextFormat as TextColor;
+
 use wavycraft\simplecrates\utils\KeyManager;
 
 class KeyCommand extends Command {
