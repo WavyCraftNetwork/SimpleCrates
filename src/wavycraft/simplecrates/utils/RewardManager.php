@@ -5,11 +5,15 @@ declare(strict_types=1);
 namespace wavycraft\simplecrates\utils;
 
 use pocketmine\Server;
+
 use pocketmine\player\Player;
+
 use pocketmine\item\StringToItemParser;
 use pocketmine\item\enchantment\EnchantmentInstance;
 use pocketmine\item\enchantment\StringToEnchantmentParser;
+
 use pocketmine\utils\SingletonTrait;
+
 use wavycraft\simplecrates\Loader;
 
 final class RewardManager {
