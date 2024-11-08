@@ -5,13 +5,18 @@ declare(strict_types=1);
 namespace wavycraft\simplecrates\utils;
 
 use pocketmine\Server;
+
 use pocketmine\player\Player;
+
 use pocketmine\item\Item;
 use pocketmine\item\StringToItemParser;
 use pocketmine\item\enchantment\EnchantmentInstance;
 use pocketmine\item\enchantment\VanillaEnchantments;
+
 use pocketmine\utils\SingletonTrait;
+
 use pocketmine\nbt\tag\StringTag;
+
 use wavycraft\simplecrates\Loader;
 
 final class KeyManager {
