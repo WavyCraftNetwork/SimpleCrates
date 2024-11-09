@@ -13,8 +13,12 @@ use pocketmine\item\enchantment\EnchantmentInstance;
 use pocketmine\item\enchantment\StringToEnchantmentParser;
 
 use pocketmine\utils\SingletonTrait;
+use pocketmine\utils\TextFormat as TextColor;
 
 use wavycraft\simplecrates\Loader;
+
+use muqsit\invmenu\InvMenu;
+use muqsit\invmenu\type\InvMenuTypeIds;
 
 final class RewardManager {
     use SingletonTrait;
@@ -80,5 +84,53 @@ final class RewardManager {
 
         $prizeMessage = "§l§f(§a!§f)§r§f Player " . $player->getName() . " has won §b" . $item->getName() . "§f from a $crateType crate!";
         Server::getInstance()->broadcastMessage($prizeMessage);
+    }
+
+    public function previewCrate(Player $player, string $crateType) {
+        $config = Loader::getInstance()->getConfig();
+        $crateItems = $config->get("prizes", [])[$crateType] ?? [];
+
+        if (empty($crateItems)) {
+            $player->sendMessage("§l§f(§4!§f)§r§f No prizes available for '$crateType' crate!");
+            return;
+        }
+
+        usort($crateItems, function ($a, $b) {
+            return ($b['chance'] ?? 1) - ($a['chance'] ?? 1);
+        });
+
+        $totalChances = array_sum(array_column($crateItems, 'chance'));
+
+        $menuType = count($crateItems) > 27 ? InvMenuTypeIds::TYPE_DOUBLE_CHEST : InvMenuTypeIds::TYPE_CHEST;
+        $menu = InvMenu::create($menuType);
+        $menu->setListener(InvMenu::readonly());
+        $menu->setName("Crate Preview: " . ucfirst($crateType));
+
+        $slot = 0;
+        foreach ($crateItems as $crateItem) {
+            if ($slot > 53) break;
+
+            $item = StringToItemParser::getInstance()->parse($crateItem["item"] ?? '');
+            if ($item === null) {
+                continue;
+            }
+
+            $item->setCount((int) ($crateItem["count"] ?? 1));
+
+            if (isset($crateItem["custom_name"])) {
+                $item->setCustomName(TextColor::RESET . $crateItem["custom_name"]);
+            }
+
+            $chancePercentage = round(($crateItem["chance"] / $totalChances) * 100, 2);
+            $item->setLore([
+                TextColor::RESET,
+                TextColor::RESET . "Chance: " . $chancePercentage . "%"
+            ]);
+
+            $menu->getInventory()->setItem($slot, $item);
+            $slot++;
+        }
+
+        $menu->send($player);
     }
 }
