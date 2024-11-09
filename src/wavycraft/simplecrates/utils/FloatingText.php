@@ -41,11 +41,12 @@ class FloatingText {
         if (!array_key_exists($tag, self::$floatingText)) {
             return;
         }
+
         $floatingText = self::$floatingText[$tag][1];
         $floatingText->setInvisible();
-        self::$floatingText[$tag][1] = $floatingText;
         self::$floatingText[$tag][0]->getWorld()->addParticle(self::$floatingText[$tag][0], $floatingText, self::$floatingText[$tag][0]->getWorld()->getPlayers());
         unset(self::$floatingText[$tag]);
+
         self::saveToFile(Loader::getInstance()->getDataFolder());
     }
 
