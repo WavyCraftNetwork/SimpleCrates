@@ -11,3 +11,5 @@ permissions:
     default: op
   simplecrates.createcrate:
     default: op
+  simplecrates.removecrate:
+    default: op
