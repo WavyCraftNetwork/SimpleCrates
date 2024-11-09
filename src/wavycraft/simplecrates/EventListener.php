@@ -75,7 +75,7 @@ class EventListener implements Listener {
             if ($block->getTypeId() === BlockTypeIds::CHEST) {
                 $crateManager->finishCrateCreation($player, $blockPos);
                 $event->cancel();
-            } else {
+                } else {
                 $player->sendMessage(TextColor::RED . "You need to interact with a chest to create a crate...");
             }
             return;
@@ -88,12 +88,14 @@ class EventListener implements Listener {
                 if ($crateType !== null) {
                     $itemInHand = $player->getInventory()->getItemInHand();
                     $nbt = $itemInHand->getNamedTag();
+                
                     if ($nbt->getTag("Key") !== null && $nbt->getString("Key") === $crateType) {
                         $crateManager->openCrate($player, $crateType);
                         $this->cooldowns[$player->getName()] = time();
                     } else {
-                        $player->sendMessage(TextColor::RED . "You need to hold a $crateType crate key to open this crate!");
-                        SoundUtils::getInstance()->playSound($player, "note.bass");
+                        RewardManager::getInstance()->previewCrate($player, $crateType);
+                        $player->sendMessage(TextColor::YELLOW . "Previewing contents of the $crateType crate.");
+                        SoundUtils::getInstance()->playSound($player, "random.orb");
                     }
 
                     $event->cancel();
