@@ -22,6 +22,7 @@ final class CrateManager {
     use SingletonTrait;
 
     private $creatingCrate = [];
+    private $removingCrate = [];
 
     public function isCrateBlock(Block $block) : bool {
         $crateConfig = new Config(Loader::getInstance()->getDataFolder() . "crate_locations.json", Config::JSON);
@@ -82,9 +83,6 @@ final class CrateManager {
             RewardManager::getInstance()->givePrize($player, $crateType);
             $player->sendMessage("You opened a $crateType crate!");
             SoundUtils::getInstance()->playSound($player, "random.levelup");
-        } else {
-            $player->sendMessage("You need a $crateType crate key to open this crate!");
-            SoundUtils::getInstance()->playSound($player, "note.bass");
         }
     }
 
@@ -133,5 +131,53 @@ final class CrateManager {
         );
 
         $player->sendMessage(TextColor::GREEN . ucfirst($crateType) . " crate created successfully!");
+        SoundUtils::getInstance()->playSound($player, "random.pop");
+    }
+
+    public function isValidCrateType(string $type): bool {
+        $crateConfig = Loader::getInstance()->getConfig();
+        $crateKeys = $crateConfig->get("crates", []);
+        return isset($crateKeys[$type]);
+    }
+
+    public function startCrateRemoval(Player $player, string $type) {
+        $this->removingCrate[$player->getName()] = $type;
+        $player->sendMessage(TextColor::GREEN . "Crate removal mode enabled for $type crate. Interact with a crate to remove it.");
+    }
+
+    public function isRemovingCrate(Player $player): bool {
+        return isset($this->removingCrate[$player->getName()]);
+    }
+
+    public function removeCrate(Position $position, Player $player) {
+        $playerName = $player->getName();
+        $crateType = $this->removingCrate[$playerName] ?? null;
+    
+        if ($crateType === null) {
+            $player->sendMessage(TextColor::RED . "Crate type not set...");
+            return;
+        }
+
+        $foundCrateType = $this->getCrateTypeByPosition($position);
+    
+        if ($foundCrateType === $crateType) {
+            $crateLocations = new Config(Loader::getInstance()->getDataFolder() . "crate_locations.json", Config::JSON);
+        
+            $crateLocations->remove($crateType . "_crate");
+            $crateLocations->save();
+
+            FloatingText::remove("{$crateType}_crate_floating_text");
+
+            $player->sendMessage(TextColor::GREEN . ucfirst($crateType) . " crate removed successfully!");
+            $this->finishCrateRemoval($player);
+        } else {
+            $player->sendMessage(TextColor::RED . "Thats not a $crateType crate!");
+        }
+    }
+
+
+    public function finishCrateRemoval(Player $player) {
+        unset($this->removingCrate[$player->getName()]);
+        $player->sendMessage(TextColor::GREEN . "Successfully removed the crate!");
     }
 }
