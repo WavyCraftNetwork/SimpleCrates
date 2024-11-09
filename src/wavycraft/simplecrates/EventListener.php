@@ -25,6 +25,7 @@ use pocketmine\utils\SingletonTrait;
 
 use wavycraft\simplecrates\utils\FloatingText;
 use wavycraft\simplecrates\utils\CrateManager;
+use wavycraft\simplecrates\utils\RewardManager;
 
 use wavycraft\core\utils\SoundUtils;
 
@@ -61,30 +62,38 @@ class EventListener implements Listener {
         $player = $event->getPlayer();
         $block = $event->getBlock();
         $blockPos = $block->getPosition();
-        $playerName = $player->getName();
+        $crateManager = CrateManager::getInstance();
 
-        if (CrateManager::getInstance()->isCreatingCrate($player)) {
+        if ($crateManager->isRemovingCrate($player)) {
+            $crateManager->removeCrate($blockPos, $player);
+            SoundUtils::getInstance()->playSound($player, "random.pop");
+            $event->cancel();
+            return;
+        }
+
+        if ($crateManager->isCreatingCrate($player)) {
             if ($block->getTypeId() === BlockTypeIds::CHEST) {
-                CrateManager::getInstance()->finishCrateCreation($player, $blockPos);
+                $crateManager->finishCrateCreation($player, $blockPos);
                 $event->cancel();
             } else {
-                $player->sendMessage(TextColor::RED . "You need to interact with a chest block to create a crate.");
+                $player->sendMessage(TextColor::RED . "You need to interact with a chest to create a crate...");
             }
             return;
         }
 
         if ($event->getAction() === PlayerInteractEvent::RIGHT_CLICK_BLOCK) {
-            if (CrateManager::getInstance()->isCrateBlock($block)) {
-                $crateType = CrateManager::getInstance()->getCrateTypeByPosition($blockPos);
+            if ($crateManager->isCrateBlock($block)) {
+                $crateType = $crateManager->getCrateTypeByPosition($blockPos);
 
                 if ($crateType !== null) {
                     $itemInHand = $player->getInventory()->getItemInHand();
                     $nbt = $itemInHand->getNamedTag();
                     if ($nbt->getTag("Key") !== null && $nbt->getString("Key") === $crateType) {
-                        CrateManager::getInstance()->openCrate($player, $crateType);
-                        $this->cooldowns[$playerName] = time();
+                        $crateManager->openCrate($player, $crateType);
+                        $this->cooldowns[$player->getName()] = time();
                     } else {
                         $player->sendMessage(TextColor::RED . "You need to hold a $crateType crate key to open this crate!");
+                        SoundUtils::getInstance()->playSound($player, "note.bass");
                     }
 
                     $event->cancel();
