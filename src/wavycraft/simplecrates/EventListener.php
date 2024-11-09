@@ -73,19 +73,20 @@ class EventListener implements Listener {
             return;
         }
 
-        if (isset($this->cooldowns[$playerName]) && time() - $this->cooldowns[$playerName] < 5) {
-            $timeLeft = 5 - (time() - $this->cooldowns[$playerName]);
-            $player->sendMessage("§l§f(§c!§f)§r§f Please wait §e" . $timeLeft . " seconds §fbefore opening another crate!");
-            $event->cancel();
-            return;
-        }
-
         if ($event->getAction() === PlayerInteractEvent::RIGHT_CLICK_BLOCK) {
             if (CrateManager::getInstance()->isCrateBlock($block)) {
                 $crateType = CrateManager::getInstance()->getCrateTypeByPosition($blockPos);
+
                 if ($crateType !== null) {
-                    CrateManager::getInstance()->openCrate($player, $crateType);
-                    $this->cooldowns[$playerName] = time();
+                    $itemInHand = $player->getInventory()->getItemInHand();
+                    $nbt = $itemInHand->getNamedTag();
+                    if ($nbt->getTag("Key") !== null && $nbt->getString("Key") === $crateType) {
+                        CrateManager::getInstance()->openCrate($player, $crateType);
+                        $this->cooldowns[$playerName] = time();
+                    } else {
+                        $player->sendMessage(TextColor::RED . "You need to hold a $crateType crate key to open this crate!");
+                    }
+
                     $event->cancel();
                 } else {
                     $player->sendMessage(TextColor::RED . "Unknown crate type.");
